@@ -3,3 +3,5 @@ Flask-SQLAlchemy>=2.5
 SQLAlchemy>=1.4
 matplotlib>=3.4
 Jinja2>=3.0
+  
+  
