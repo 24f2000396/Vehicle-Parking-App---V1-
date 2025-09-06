@@ -97,6 +97,10 @@
       background-color: #f08080;
       color: white;
     }
+    .btn-veiwbill {
+      background-color: #00baff;
+      color: white;
+    }
     .btn-out {
       background-color: #90ee90;
       color: #000;
@@ -147,7 +151,8 @@
            <tr>
               <th>Paking Spot id </th>
                <th>Vehicle No</th>
-               <th>booking time</th>
+               <th>Date</th>
+               <th>Booking time</th>
                <th>Total Time </th>
                <th> Total Price</th>
                <th>Action</th>
@@ -157,7 +162,9 @@
              <tr>
                 <td>{{ h.spot_id }}</td>
                 <td>{{ h.vehicle_number}}</td>
-                <td>{{ h.start_time }}</td>
+                <td>{{ h.start_time.strftime('%-d %b %Y') }}</td>
+                <td>{{ h.start_time.strftime('%I:%M %p') }}</td>
+
                 <td> - </td>
                 <td> - </td>
                 <td>
@@ -171,10 +178,11 @@
             <tr>
               <td>{{ h.spot_id }}</td>
               <td>{{ h.vehicle_number }}</td>
-              <td>{{ h.start_time }}</td>
+              <td>{{ h.start_time.strftime('%-d %b %Y') }}</td>
+              <td>{{ h.start_time.strftime('%I:%M %p') }}</td>
               <td>{{ h.total_time }}</td>
               <td>₹{{ h.total_price }}</td>
-              <td> - </td>
+              <td>  <a href="#" class="btn btn-veiwbill"> View Invoice </a> </td>
             </tr>
           {% endif %}
           
@@ -189,10 +197,10 @@
     </div>
      
     <div class="section">
-      <h3>Search Parking @Pincode</h3>
+      <h3>Search Parking Near You</h3>
       <div class="search-box">
         <form action="{{ url_for('user_dashboard', user_id=user.id) }}"  method="POST">
-          <input type="text" name="pincode" placeholder="Pincode"  required>
+          <input type="text" name="pincode" placeholder="Enter Pincode or Address"  required>
           <input type="submit" value="search" class="btn-search"  >
         </form>
       </div>

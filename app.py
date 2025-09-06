@@ -151,17 +151,24 @@ def signup():
             return redirect(url_for('user_dashboard', user_id=new_user.id ))
             
            
-               
 @app.route('/user_dashboard/<int:user_id>', methods=['GET', 'POST'])
 def user_dashboard(user_id):
     user = User.query.get_or_404(user_id)
-    user_history = History.query.filter_by(user_id=user.id).order_by(History.id.desc()).all()
+    user_history = History.query.filter_by(user_id=user.id).order_by(History.id.desc()).limit(3).all()
     parking_lots = Parking_lot.query.all()
-    search_results = None
+    search_results = []
+
+    pincode = None
     if request.method == "POST":
         pincode = request.form.get("pincode")
-        search_results = Parking_lot.query.filter_by(pin_code=pincode).all()
-    
+
+    if pincode:  # Only search if pincode exists
+        search_results = Parking_lot.query.filter(Parking_lot.address.contains(pincode)).all()
+        if not search_results:
+            search_results = Parking_lot.query.filter(Parking_lot.parking_lot_name.contains(pincode)).all()
+    else:
+        search_results = parking_lots  # Show all if no search
+
     return render_template(
         'user_dashboard.html',
         user=user,
@@ -318,6 +325,10 @@ def  admin_dashboard():
     if request.method == "POST":
         pincode = request.form.get("pincode")
         search_results = Parking_lot.query.filter_by(pin_code=pincode).all()
+        if not search_results:
+            search_results = Parking_lot.query.filter(Parking_lot.address.contains(pincode)).all()
+            if not search_results:
+                search_results = Parking_lot.query.filter(Parking_lot.parking_lot_name.contains(pincode)).all()
 
     
     return  render_template('admin_dashboard.html',parking_lots=parking_lots,search_results=search_results)

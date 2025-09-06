@@ -1,106 +1,113 @@
-
 # 🚗 Vehicle Parking App - V1
 
-A Flask-based multi-user parking system with admin and user roles. 
-It uses SQLite for the database and shows parking summaries with charts.
-
-
-### ✅ Admin Features:
-- 🛠️ Add, Edit, and Delete Parking Lots  
-- 📊 View all parking lots with status of each spot  
-- 👥 View all registered users  
-- 📈 See parking summary using charts:
-  - Occupied vs Free Spots  
-  - Total Income per Lot  
-- ❌ **Prevent deletion of parking lots if any spot is currently occupied**
-
-### ✅ User Features:
-- 🔐 Register/Login with email and password  
-- 📍 Search parking lots by pin code  
-- 🚗 Book the first available spot (auto-allocation)  
-- 🔓 Release spot with preview of time and price  
-- 📜 View personal booking history  
-- 📅 Weekly spending summary in bar chart  
-
-
-## 🔧 Technologies Used
-
-- Python 3.12.10
-- Flask
-- Flask-SQLAlchemy
-- SQLite
-- Matplotlib
-- HTML & CSS
-- Jinja2 (Templating)
+A **Flask-based multi-user parking management system** with separate **Admin** and **User** roles.  
+It uses **SQLite** as the database and generates **parking summaries with interactive charts**.  
 
 ---
+
+## ✨ Features
+
+### 👨‍💼 Admin Features
+- 🛠️ Manage Parking Lots (Add, Edit, Delete)  
+- 📊 View all parking lots with live spot status  
+- 👥 Manage registered users  
+- 📈 Generate parking analytics with charts:
+  - Occupied vs Free Spots  
+  - Income per Parking Lot  
+- ❌ Prevent deletion of lots if any spot is occupied  
+
+### 👤 User Features
+- 🔐 Register & Login with email and password  
+- 📍 Search parking lots by **PIN code**  
+- 🚗 Auto-allocate the first available parking spot  
+- 🔓 Release a spot (preview total time & price before confirming)  
+- 📜 View booking history  
+- 📅 Weekly spending summary in **bar chart**  
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Python (Flask, Flask-SQLAlchemy)  
+- **Database:** SQLite  
+- **Frontend:** HTML, CSS, Jinja2 Templates  
+- **Visualization:** Matplotlib  
+- **Environment:** Python venv  
+
+---
+## 📂 Project Structure
+
+```bash
 VEHICLE-PARKING-APP/
 │
-├── pycache/ # Compiled Python files
+├── app.py                # Main Flask application
+├── requirements.txt      # Python dependencies
+├── README.md             # Project documentation
 │
-├── instance/
-│ └── parking.db # SQLite database
+├── instance/             # Instance folder (auto-created by Flask)
+│   └── parking.db        # SQLite database
 │
-├── static/ # Static files (CSS, images, etc.)
+├── static/               # Static assets (CSS, images, JS)
+│   └── style.css         # Example CSS file
 │
-├── templates/ # HTML templates
-│ ├── add_parking.html
-│ ├── admin_dashboard.html
-│ ├── admin_summary.html
-│ ├── book_spot.html
-│ ├── edit_parking.html
-│ ├── edit_user.html
-│ ├── landing.html
-│ ├── release_spot.html
-│ ├── signup.html
-│ ├── user_dashboard.html
-│ ├── user_summary.html
-│ ├── view_parking.html
-│ └── view_users.html
+├── templates/            # Jinja2 HTML templates
+│   ├── admin/            # Admin pages
+│   │   ├── admin_dashboard.html
+│   │   ├── admin_summary.html
+│   │   ├── add_parking.html
+│   │   ├── edit_parking.html
+│   │   ├── view_parking.html
+│   │   └── view_users.html
+│   │
+│   ├── user/             # User pages
+│   │   ├── user_dashboard.html
+│   │   ├── user_summary.html
+│   │   ├── book_spot.html
+│   │   ├── release_spot.html
+│   │   └── signup.html
+│   │
+│   └── shared/           # Common/landing pages
+│       ├── landing.html
+│       └── edit_user.html
 │
-├── venv/ # Virtual environment
+├── venv/                 # Virtual environment (not pushed to GitHub)
 │
-├── app.py # Main application file
-├── README.md # Project documentation
-└── requirements.txt # Python dependencies
-
-
-
+└── __pycache__/          # Compiled Python files
 
 ---
 
 ## 🧩 Entity-Relationship (ER) Model
 
-### 🧍‍♂️ User
-| Column      | Type        | Details                    |
-|-------------|-------------|----------------------------|
-| id          | Integer     | Primary Key, AutoIncrement |
-| email       | String(80)  | Unique, Required           |
-| password    | String(30)  | Required                   |
-| name        | String(30)  | Required                   |
-| address     | String(100) | Required                   |
-| pin_code    | String(6)   | Required                   |
-| is_admin    | Boolean     | Default = False            |
+### 🧍 User
+| Column   | Type        | Details                    |
+|----------|-------------|----------------------------|
+| id       | Integer     | Primary Key, AutoIncrement |
+| email    | String(80)  | Unique, Required           |
+| password | String(30)  | Required                   |
+| name     | String(30)  | Required                   |
+| address  | String(100) | Required                   |
+| pin_code | String(6)   | Required                   |
+| is_admin | Boolean     | Default = False            |
 
-**Relationships:**
-- Has many `ParkingSpots` (via `user_id`)
-- Has many `History` records
+**Relationships:**  
+- Has many `ParkingSpots` (via `user_id`)  
+- Has many `History` records  
 
 ---
 
-### 🅿️ Parking_lot
-| Column             | Type         | Details                    |
-|--------------------|--------------|----------------------------|
-| id                 | Integer      | Primary Key, AutoIncrement |
-| parking_lot_name   | String(100)  | Required                   |
-| address            | String(150)  | Required                   |
-| pin_code           | String(6)    | Required                   |
-| price_per_hour     | Integer      | Required                   |
-| total_capacity     | Integer      | Required                   |
-| avilable_capacity  | Integer      | Required                   |
+### 🅿️ ParkingLot
+| Column            | Type         | Details                    |
+|-------------------|--------------|----------------------------|
+| id                | Integer      | Primary Key, AutoIncrement |
+| parking_lot_name  | String(100)  | Required                   |
+| address           | String(150)  | Required                   |
+| pin_code          | String(6)    | Required                   |
+| price_per_hour    | Integer      | Required                   |
+| total_capacity    | Integer      | Required                   |
+| available_capacity| Integer      | Required                   |
 
-**Relationships:**
-- Has many `ParkingSpots` (via `id → lot_id`)
+**Relationships:**  
+- Has many `ParkingSpots` (via `id → lot_id`)  
 
 ---
 
@@ -108,7 +115,7 @@ VEHICLE-PARKING-APP/
 | Column         | Type        | Details                          |
 |----------------|-------------|----------------------------------|
 | id             | Integer     | Primary Key                      |
-| lot_id         | Integer     | Foreign Key → Parking_lot(id)    |
+| lot_id         | Integer     | Foreign Key → ParkingLot(id)     |
 | spot_number    | String(10)  | Required                         |
 | is_occupied    | Boolean     | Default = False                  |
 | user_id        | Integer     | Foreign Key → User(id), Nullable|
@@ -116,10 +123,10 @@ VEHICLE-PARKING-APP/
 | start_time     | DateTime    | Optional                         |
 | end_time       | DateTime    | Optional                         |
 
-**Relationships:**
-- Belongs to one `Parking_lot`
-- Optionally linked to one `User`
-- Has many `History` records
+**Relationships:**  
+- Belongs to one `ParkingLot`  
+- Optionally linked to one `User`  
+- Has many `History` records  
 
 ---
 
@@ -135,15 +142,30 @@ VEHICLE-PARKING-APP/
 | total_time     | String(50)  | Optional (formatted duration string) |
 | total_price    | Float       | Optional (calculated on release)     |
 
-**Relationships:**
-- Belongs to `User`
-- Belongs to `ParkingSpot`
+**Relationships:**  
+- Belongs to `User`  
+- Belongs to `ParkingSpot`  
 
 ---
 
+## 🔗 Relationships Summary
+- **User → ParkingSpots → History**  
+- **ParkingLot → ParkingSpots → History**  
+- **History** acts as a transaction log for bookings and releases.  
 
+---
 
-### 🔗 Relationships Summary
+git clone https://github.com/24f2000396/vehicle-parking-app.git
+cd vehicle-parking-app
 
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate   # For Linux/Mac
+venv\Scripts\activate      # For Windows
 
+# Install dependencies
+pip install -r requirements.txt
+
+# Run Flask server
+flask run
 
